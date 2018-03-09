@@ -1,3 +1,4 @@
+//client/components/App.js
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
@@ -6,6 +7,8 @@ import Update from './Update';
 import Delete from './Delete';
 import { Tab, Tabs } from 'react-bootstrap';
 import YearTabsRouter from './tabs/yearTabsRouter';
+import MonthTabs from './tabs/monthTabs';
+
 
 export default class App extends React.Component {
 constructor() {
@@ -21,8 +24,9 @@ componentWillReceiveProps(nextProps) {
     this.setState({activeTab: parseInt(searchObj.year)});
     this.setState({selectedYear: searchObj.year});
     this.setState({selectedMonth: searchObj.month});
-    this.getData(this, searchObj.year, searchObj.month);
-  } else {
+
+this.getData(this, searchObj.year, searchObj.month);
+  }else{
       this.getData(this, 2016, 'All');
     }
   }
@@ -42,16 +46,17 @@ getData(ev, year, month){
         ev.setState({selectedYear: parseInt(year)});
         ev.setState({selectedMonth: month});
       });
+
 }
 render() {
     return (
       <div>
         <Tabs activeKey={this.state.activeTab} onSelect={this.handleSelect}>
-          <Tab eventKey={2016} title={<YearTabsRouter year='2016' />}></Tab>
-          <Tab eventKey={2017} title={<YearTabsRouter year='2017' />}></Tab>
-          <Tab eventKey={2018} title={<YearTabsRouter year='2018'/>}></Tab>
-          <Tab eventKey={2019} title={<YearTabsRouter year='2019'/>}></Tab>
-          <Tab eventKey={2020} title={<YearTabsRouter year='2020'/>}></Tab>
+          <Tab eventKey={2016} title={<YearTabsRouter year='2016' />}><MonthTabs year='2016' monthlyActiveTab={this.state.selectedMonth}/></Tab>
+          <Tab eventKey={2017} title={<YearTabsRouter year='2017' />}><MonthTabs year='2017' monthlyActiveTab={this.state.selectedMonth}/></Tab>
+          <Tab eventKey={2018} title={<YearTabsRouter year='2018'/>}><MonthTabs year='2018' monthlyActiveTab={this.state.selectedMonth}/></Tab>
+          <Tab eventKey={2019} title={<YearTabsRouter year='2019'/>}><MonthTabs year='2019' monthlyActiveTab={this.state.selectedMonth}/></Tab>
+          <Tab eventKey={2020} title={<YearTabsRouter year='2020'/>}><MonthTabs year='2020' monthlyActiveTab={this.state.selectedMonth}/></Tab>
         </Tabs>
         <Add selectedMonth={this.state.selectedMonth} selectedYear={this.state.selectedYear} />
         <table>
@@ -64,7 +69,7 @@ render() {
                 return  <tr><td className='counterCell'></td><td className='desc-col'>{exp.description}</td><td className='button-col'>{exp.amount}</td><td className='button-col'>{exp.month}</td><td className='button-col'>{exp.year}</td><td className='button-col'><Update expense={exp}/></td><td className='button-col'><Delete expense={exp} /></td></tr>
               })
             }
-          </tbody>
+            </tbody>
         </table>
       </div>
     );

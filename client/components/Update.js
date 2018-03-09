@@ -18,39 +18,42 @@ class Update extends React.Component {
       modalIsOpen: false
     }
 
-this.update = this.update.bind(this);
+  this.update = this.update.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-
-}
-
-componentDidMount() {
+  }
+  componentDidMount() {
     this.setState({
       id: this.props.expense._id,
       description: this.props.expense.description,
       amount: this.props.expense.amount,
       month: this.props.expense.month,
-      year: this.props.expense.year,
+      year: this.props.expense.year
     });
   }
-
-openModal() {
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      id: nextProps.expense._id,
+      description: nextProps.expense.description,
+      month:nextProps.expense.month,
+      year:nextProps.expense.year
+    })
+  }
+  openModal() {
     this.setState({
       modalIsOpen: true
     });
   }
-
-closeModal() {
+  closeModal() {
     this.setState({
       modalIsOpen: false,
       messageFromServer: ''
     });
   }
-
-handleSelectChange(e) {
+  handleSelectChange(e) {
     if (e.target.name == "month") {
       this.setState({
         month: e.target.value
@@ -62,25 +65,21 @@ handleSelectChange(e) {
       });
     }
   }
-
-handleTextChange(e) {
+  handleTextChange(e) {
     if (e.target.name == "description") {
       this.setState({
         description: e.target.value
       });
     }
-
-if (e.target.name == "amount") {
-      this.setState({
-        amount: e.target.value
-      });
-    }
+  if (e.target.name == "amount") {
+    this.setState({
+      amount: e.target.value
+    });
+   }
   }
-
 onClick(e) {
-    this.update(this);
-  }
-
+  this.update(this);
+}
 update(e) {
     axios.post('/update',
       querystring.stringify({
@@ -97,10 +96,8 @@ update(e) {
       e.setState({
         messageFromServer: response.data
       });
-
 });
   }
-
 render() {
     if(this.state.messageFromServer == ''){
       return (
@@ -111,12 +108,10 @@ render() {
             onRequestClose={this.closeModal}
             contentLabel="Add Expense"
             className="Modal">
-
-          <Link to={{pathname: '/', search: '' }} style={{ textDecoration: 'none' }}>
+            <Link to={{pathname: '/', search: '?month='+this.state.month+'&year='+this.state.year }} style={{ textDecoration: 'none' }}>
             <Button bsStyle="danger" bsSize="mini" onClick={this.closeModal}><span className="closebtn glyphicon glyphicon-remove"></span></Button>
           </Link><br/>
-
-       <fieldset>
+          <fieldset>
             <label for="description">Description:</label><input type="text" id="description" name="description" value={this.state.description} onChange={this.handleTextChange}></input>
             <label for="amount">Amount:</label><input type="number" id="amount" name="amount" value={this.state.amount} onChange={this.handleTextChange}></input>
             <label for="month">Month:</label><select id="month" name="month" value={this.state.month} onChange={this.handleSelectChange}>
@@ -142,8 +137,7 @@ render() {
                       <option value="2020" id="20">2020</option>
                 </select>
           </fieldset>
-
-        <div className='button-center'>
+          <div className='button-center'>
               <br/>
               <Button bsStyle="warning" bsSize="small" onClick={this.onClick}>Update</Button>
             </div>
@@ -161,10 +155,9 @@ render() {
            onRequestClose={this.closeModal}
            contentLabel="Add Expense"
            className="Modal">
-
         <div className='button-center'>
               <h3>{this.state.messageFromServer}</h3>
-              <Link to={{pathname: '/', search: '' }} style={{ textDecoration: 'none' }}>
+              <Link to={{pathname: '/', search: '?month='+this.state.month+'&year='+this.state.year}} style={{ textDecoration: 'none' }}>
                 <Button bsStyle="success" bsSize="mini" onClick={this.closeModal}>Close the Dialog</Button>
               </Link>
             </div>
