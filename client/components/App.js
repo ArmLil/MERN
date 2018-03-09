@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Add from './Add';
-import Update from './Update'
+import Update from './Update';
+import Delete from './Delete';
 
 export default class App extends React.Component {
 
@@ -15,7 +16,7 @@ constructor() {
 componentDidMount() {
     this.getData(this, '2016');
   }
-  componentWillReceiveProps(nextProps) {
+componentWillReceiveProps(nextProps) {
     this.getData(this, '2016');
   }
 
@@ -33,7 +34,15 @@ render() {
         <Add selectedMonth={this.state.selectedMonth} selectedYear={this.state.selectedYear} />
         <table>
           <thead>
-            <tr><th></th><th className='desc-col'>Description</th><th className='button-col'>Amount</th><th className='button-col'>Month</th><th className='button-col'>Year</th><th className='button-col'>Update</th></tr>
+            <tr>
+              <th></th>
+              <th className='desc-col'>Description</th>
+              <th className='button-col'>Amount</th>
+              <th className='button-col'>Month</th>
+              <th className='button-col'>Year</th>
+              <th className='button-col'>Update</th>
+              <th className='button-col'>Delete</th>
+            </tr>
           </thead>
           <tbody>
             {
@@ -45,13 +54,13 @@ render() {
                            <td className='button-col'>{exp.month}</td>
                            <td className='button-col'>{exp.year}</td>
                            <td className='button-col'><Update expense={exp} /></td>
+                           <td className='button-col'><Delete id={exp._id} expense={exp} /></td>
                         </tr>
               })
             }
-            </tbody>
-
+          </tbody>
        </table>
-      </div>
+     </div>
     );
   }
 }
